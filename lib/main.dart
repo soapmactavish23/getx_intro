@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:getx_intro/value_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,46 +16,52 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key}) : super(key: key);
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   final textControllerEC = TextEditingController();
 
-  String definidedValue = "";
+  final valueController = ValueController();
 
   @override
   Widget build(BuildContext context) {
-    print('Construiu');
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Valor definido: $definidedValue'),
+            GetBuilder<ValueController>(
+              init: valueController,
+              initState: (_) {},
+              builder: (ctrl) {
+                return Text('Valor definido: ${ctrl.definidedValue}');
+              },
+            ),
             TextField(
               controller: textControllerEC,
             ),
-            ElevatedButton(
-              onPressed: () {
-                String value = textControllerEC.text;
-                setState(() {
-                  definidedValue = value;
-                });
-              },
-              child: const Text('Confirmar'),
-            )
+            const SizedBox(
+              height: 10,
+            ),
+            GetBuilder<ValueController>(
+                init: valueController,
+                builder: (control) {
+                  return control.isLoading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () {
+                            String value = textControllerEC.text;
+                            valueController.setValue(value);
+                          },
+                          child: const Text('Confirmar'),
+                        );
+                })
           ],
         ),
       ),
