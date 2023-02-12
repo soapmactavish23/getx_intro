@@ -36,23 +36,23 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GetBuilder<ValueController>(
+            GetX<ValueController>(
               init: valueController,
               initState: (_) {},
               builder: (ctrl) {
                 return Text('Valor definido: ${ctrl.definidedValue}');
               },
             ),
-            TextField(
-              controller: textControllerEC,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32),
+              child: TextField(
+                controller: textControllerEC,
+              ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            GetBuilder<ValueController>(
+            GetX<ValueController>(
                 init: valueController,
                 builder: (control) {
-                  return control.isLoading
+                  return control.isLoading.value
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: () {
