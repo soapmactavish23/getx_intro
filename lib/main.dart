@@ -36,32 +36,26 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GetX<ValueController>(
-              init: valueController,
-              initState: (_) {},
-              builder: (ctrl) {
-                return Text('Valor definido: ${ctrl.definidedValue}');
-              },
-            ),
+            Obx(() {
+              return Text('Valor definido: ${valueController.definidedValue}');
+            }),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: TextField(
                 controller: textControllerEC,
               ),
             ),
-            GetX<ValueController>(
-                init: valueController,
-                builder: (control) {
-                  return control.isLoading.value
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: () {
-                            String value = textControllerEC.text;
-                            valueController.setValue(value);
-                          },
-                          child: const Text('Confirmar'),
-                        );
-                })
+            Obx(() {
+              return valueController.isLoading.value
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () {
+                        String value = textControllerEC.text;
+                        valueController.setValue(value);
+                      },
+                      child: const Text('Confirmar'),
+                    );
+            })
           ],
         ),
       ),
